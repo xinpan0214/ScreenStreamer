@@ -8,8 +8,32 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
+
+    dexOptions {
+        //分包时使用最大内存
+        javaMaxHeapSize "4g"
+        //是否使用大分包模式
+        jumboMode true
+        //是否将依赖库打包成dex，会减慢clean速度
+        preDexLibraries false
+        //是否使用增量模式，IDE升级后，此参数没什么意义了
+        //incremental true
+        //分包，可指定主dex包含哪些class
+//        additionalParameters = ['--multi-dex', '--main-dex-list=' + 'maindexlist.txt', '--minimal-main-dex',
+//                                '--set-max-idx-number=1000']
+    }
+
+    splits {
+        abi {                           //可限制so，选取合适的。
+            enable true                 //启用ABI拆分机制
+            reset()
+            include 'armeabi-v7a'
+            universalApk false          //指示是否打包一个通用版本（包含所有的ABI）。默认值为 false。
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,9 +44,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation project(path: ':libscreenstream')
+    implementation project(path: ':libscreenstream_v2')
 }

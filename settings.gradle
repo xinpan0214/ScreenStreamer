@@ -1,1 +1,1 @@
-include ':sample', ':libscreenstream'
+include ':sample', ':libscreenstream', ':libmp4parser_1_x', ':libscreenstream_v2'
